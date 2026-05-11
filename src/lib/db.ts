@@ -60,10 +60,15 @@ import bcrypt from "bcryptjs";
 
 let db: Database | null = null;
 
-const getDbPath = () =>
-  process.env.NODE_ENV === "production"
-    ? "/tmp/database.sqlite"
-    : path.join(process.cwd(), "database.sqlite");
+// const getDbPath = () =>
+//   process.env.NODE_ENV === "production"
+//     ? "/tmp/database.sqlite"
+//     : path.join(process.cwd(), "database.sqlite");
+const getDbPath = () => {
+  // Always use the project root for SQLite on Render Free Tier
+  // This ensures the API and the Initialization script look at the same file
+  return path.join(process.cwd(), "database.sqlite");
+};
 
 export async function getDb(): Promise<Database> {
   if (db) return db;
